@@ -1,9 +1,6 @@
 import React from 'react';
-import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import { Text, TouchableOpacity, StyleSheet } from 'react-native';
 import NfcManager, {NfcTech} from 'react-native-nfc-manager'
-
-
-
 
 const ReadButton = () => {
 
@@ -23,42 +20,35 @@ const ReadButton = () => {
   }
 
   return (
-      <TouchableOpacity onPress={readNdef} style={styles.button}>
-        <Text>Scan a Tag</Text>
+      <TouchableOpacity 
+        onPress={readNdef} 
+        style={styles.button}
+        activeOpacity={0.7}
+      >
+        <Text style={styles.buttonText}>Scan a Tag</Text>
       </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-    // width: width,
-    paddingVertical: 20,
-  },
-  header: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    padding: 20,
-    // width: width,
-    alignItems: 'center',
-  },
-  headerText: {
-    fontSize: 28,
-    fontWeight: 'bold',
-  },
   button: {
-    backgroundColor: '#ff9900',
-    padding: 10,
-    borderRadius: 6,
+    backgroundColor: '#1e90ff',
+    paddingVertical: 15,
+    paddingHorizontal: 30,
+    borderRadius: 25,
+    alignItems: 'center',
+    marginVertical: 10,
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   buttonText: {
     color: '#fff',
-    fontSize: 18,
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });
+
 export default ReadButton;
-
-

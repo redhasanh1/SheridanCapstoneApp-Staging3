@@ -1,4 +1,5 @@
 export * from './AppContainer'
+export * from './AmplifyTheme'
 export * from './Avatar'
 export * from './Button'
 export * from './Cost'
@@ -34,3 +35,4 @@ export * from './CardCareer'
 export * from './CardEducation'
 export * from './CardAbout'
 export * from './Loading'
+

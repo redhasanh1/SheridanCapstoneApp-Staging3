@@ -1,11 +1,9 @@
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
-import { Amplify } from 'aws-amplify';
+import { StatusBar } from 'expo-status-bar';
+import { StyleSheet, View, Image, Text, TextInput, Button } from 'react-native';
+import { Auth, Amplify } from 'aws-amplify';
 import config from "./src/aws-exports";
-import { withAuthenticator } from 'aws-amplify-react-native';
-import Home from './Home';
-import { Authenticator, ThemeProvider } from '@aws-amplify/ui-react-native';
+import Home from './Home'; // Make sure to use the correct path to your Home component
 
 Amplify.configure({
   ...config,
@@ -15,34 +13,99 @@ Amplify.configure({
 });
 
 const theme = {
-  tokens: {
-    colors: {
-      brand: {
-        primary: {
-          10: '#FF1493', // Pink color example
-        },
-      },
-    },
+  colors: {
+    primary: '#800080',
   },
 };
 
-function App() {
+const MyCustomSignIn = ({ setIsSignedIn }) => {
+  const [username, setUsername] = React.useState('');
+  const [password, setPassword] = React.useState('');
+
+  const handleSignIn = async () => {
+    try {
+      const user = await Auth.signIn(username, password);
+      console.log('Successful sign in: ', user);
+      setIsSignedIn(true); // Update sign-in state on successful sign in
+    } catch (error) {
+      console.log('Error signing in: ', error);
+    }
+  };
+
   return (
-    <ThemeProvider theme={theme}>
-      <View style={styles.container}>
-        <Home />
-        <StatusBar style="auto" />
-      </View>
-    </ThemeProvider>
+    <View style={styles.signInContainer}>
+      <Image source={require('./assets/nfc.png')} style={styles.logo} />
+      <Text style={styles.signInText}>Sign In</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Username"
+        value={username}
+        onChangeText={text => setUsername(text)}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Password"
+        secureTextEntry={true}
+        value={password}
+        onChangeText={text => setPassword(text)}
+      />
+      <Button title="Sign In" onPress={handleSignIn} />
+    </View>
+  );
+};
+
+function App() {
+  const [isSignedIn, setIsSignedIn] = React.useState(false);
+
+  return (
+    <View style={styles.container}>
+      {isSignedIn ? <Home /> : <MyCustomSignIn setIsSignedIn={setIsSignedIn} />}
+      <StatusBar style="auto" />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
   },
+  signInContainer: {
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 20,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.8,
+    shadowRadius: 2,
+    elevation: 4,
+  },
+  logo: {
+    width: 200,
+    height: 100,
+    resizeMode: 'contain',
+    marginBottom: 20,
+  },
+  signInText: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
+  input: {
+    width: '100%',
+    height: 40,
+    marginBottom: 10,
+    padding: 10,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 5,
+  },
 });
 
-export default withAuthenticator(App);
+export default App;
