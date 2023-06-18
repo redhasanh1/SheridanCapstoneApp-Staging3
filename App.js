@@ -59,7 +59,7 @@ function App() {
 
   return (
     <View style={styles.container}>
-      {isSignedIn ? <Home /> : <MyCustomSignIn setIsSignedIn={setIsSignedIn} />}
+      {isSignedIn ? <Home setIsSignedIn={setIsSignedIn} /> : <MyCustomSignIn setIsSignedIn={setIsSignedIn} />}
       <StatusBar style="auto" />
     </View>
   );

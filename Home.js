@@ -1,12 +1,13 @@
-
 import React, { useRef } from 'react';
 import { StyleSheet, Text, View, Pressable, Platform, Image, Animated } from 'react-native';
 import { Auth } from 'aws-amplify';
 import ReadButton from "./ReadButton";
 import WriteButton from './WriteButton';
 import CancelButton from './CancelButton';
-const Home = () => {
+
+const Home = ({ setIsSignedIn }) => { // Notice the addition of setIsSignedIn here
   const fadeAnim = useRef(new Animated.Value(0)).current;
+  
   React.useEffect(() => {
     Animated.timing(fadeAnim, {
       toValue: 1,
@@ -14,13 +15,16 @@ const Home = () => {
       useNativeDriver: true,
     }).start();
   }, [fadeAnim]);
+
   const signOut = async () => {
     try {
       await Auth.signOut({ global: true });
+      setIsSignedIn(false); // Update sign-in state on successful sign out
     } catch (error) {
       console.log('error signing out: ', error);
     }
   };
+
   const content = (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -48,15 +52,18 @@ const Home = () => {
       </View>
     </View>
   );
+
   if (Platform.OS === 'web') {
     return content;
   }
+
   return (
     <Animated.View style={{...styles.container, opacity: fadeAnim}}>
       {content}
     </Animated.View>
   );
 };
+
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#1a1a1a',
@@ -111,4 +118,5 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
 });
+
 export default Home;
